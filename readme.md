@@ -146,7 +146,7 @@ Example:
 
 If you want to inject the alerts yourself, this is perfect for you.
 
-Ensure you have been added the facade ([Installation](#Installation)) and set the config option 'inject' to false.
+Ensure you have been added the facade ([Installation](#installation)) and set the config option 'inject' to false.
 
 Now you may load the alerts using
 
