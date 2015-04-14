@@ -1,0 +1,25 @@
+{
+    "name": "kotfire/system-alerts",
+    "description": "Easy and simple system alerts for Laravel 4",
+    "keywords": ["laravel", "alert", "maintenance", "message"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gustavo Real",
+            "email": "KotDesigns@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Kotfire\\SystemAlerts\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
