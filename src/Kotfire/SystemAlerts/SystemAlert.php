@@ -102,9 +102,11 @@ class SystemAlert {
     /**
      * Load the alerts JSON file.
      *
+     * @param  boolean  $parse
+     *
      * @return array
      */
-    public function loadAlerts()
+    public function loadAlerts($parse = true)
     {
         $path = $this->alertsStorage.'/alerts.json';
 
@@ -120,7 +122,11 @@ class SystemAlert {
         }
 
         // Parse alerts
-        return $this->parseAlerts($alerts);
+        if ($parse) {
+            return $this->parseAlerts($alerts);
+        } else {
+            return $alerts;
+        }
     }
 
     /**
@@ -154,7 +160,7 @@ class SystemAlert {
                 throw new Exception("Maintenance alert already exists");
             }
             $alert = new Alert($msg, $type, $minutes);
-            $loaded = $this->loadAlerts();
+            $loaded = $this->loadAlerts(false);
             $alerts = array_merge($loaded, $alert->toArray());
             $this->writeAlerts($alerts);
 
@@ -174,7 +180,7 @@ class SystemAlert {
     public function deleteAlert($id)
     {
         try {
-            $alerts = $this->loadAlerts();
+            $alerts = $this->loadAlerts(false);
 
             if (!isset($alerts[$id])) {
                 throw new Exception("Alert does not exists");
@@ -211,7 +217,7 @@ class SystemAlert {
      */
     public function hasMaintenanceAlert()
     {
-        $alerts = $this->loadAlerts();
+        $alerts = $this->loadAlerts(false);
         foreach ($alerts as $alert) {
             if ($alert['type'] === Alert::MAINTENANCE_TYPE) {
                 return true;
@@ -244,7 +250,7 @@ class SystemAlert {
      */
     public function hasAlerts()
     {
-        return !empty($this->loadAlerts());
+        return !empty($this->loadAlerts(false));
     }
 
     /**
@@ -282,7 +288,7 @@ class SystemAlert {
      */
     public function removeMaintenanceAlerts()
     {
-        $alerts = $this->loadAlerts();
+        $alerts = $this->loadAlerts(false);
         foreach ($alerts as $id => $alert) {
             if ($alert['type'] === Alert::MAINTENANCE_TYPE) {
                 unset($alerts[$id]);
