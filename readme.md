@@ -126,6 +126,12 @@ $ php artisan alert:delete ID
 $ php artisan alert:list
 ```
 
+**_Delete all alerts_**
+
+```
+$ php artisan alert:clear
+```
+
 ### Display
 
 There are two ways to display the alerts: auto and manual
