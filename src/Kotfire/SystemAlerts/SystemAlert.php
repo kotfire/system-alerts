@@ -63,7 +63,7 @@ class SystemAlert {
     public function __construct($app)
     {
         $this->app = $app;
-        $path = $app['config']->get('kotfire/system-alert::storage');
+        $path = $app['config']->get('kotfire/system-alerts::storage');
         $this->alertsStorage = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->files = $this->app['files'];
         $this->config = $app['config'];
@@ -96,7 +96,7 @@ class SystemAlert {
 
     public function getConfig($key)
     {
-        return $this->config->get("kotfire/system-alert::$key");
+        return $this->config->get("kotfire/system-alerts::$key");
     }
   
     /**
@@ -264,7 +264,7 @@ class SystemAlert {
             return $response;
         }
 
-        if ($app['config']->get('kotfire/system-alert::inject', true)) {
+        if ($app['config']->get('kotfire/system-alerts::inject', true)) {
             try {
                 $this->injectAlerts($response);
             } catch (\Exception $e) {
@@ -301,7 +301,7 @@ class SystemAlert {
     protected function injectAlerts(Response $response)
     {
         $app = $this->app;
-        $containerId = $this->config->get('kotfire/system-alert::container_id');
+        $containerId = $this->config->get('kotfire/system-alerts::container_id');
         $htmlContainer = 'id="'.$containerId.'"';
 
         $content = $response->getContent();
@@ -317,7 +317,7 @@ class SystemAlert {
                 $alerts = $this->loadAlerts();
 
                 // Load view
-                $view = View::make('kotfire/system-alert::template')
+                $view = View::make('kotfire/system-alerts::template')
                     ->with('alerts', $alerts)
                     ->render();
 
@@ -371,7 +371,7 @@ class SystemAlert {
                             if ($dateTime->isFuture()) {
                                 return $dateTime->diffForHumans(null, true);
                             } else {
-                                return $config->get('kotfire/system-alert::over_time_message');
+                                return $config->get('kotfire/system-alerts::over_time_message');
                             }
                         } else {
                             return $match[0];

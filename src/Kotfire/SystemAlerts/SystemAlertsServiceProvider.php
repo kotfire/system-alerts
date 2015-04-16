@@ -20,7 +20,7 @@ class SystemAlertsServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('kotfire/system-alert', 'kotfire/system-alert');
+		$this->package('kotfire/system-alerts', 'kotfire/system-alerts');
 
 		$app = $this->app;
 
