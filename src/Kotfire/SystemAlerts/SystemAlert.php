@@ -51,7 +51,7 @@ class SystemAlert {
      *
      * @var Array
      */
-    protected $replacers = ['time'];
+    protected $replacers = ['time', 'date', 'datetime', 'dateformat'];
 
     /**
      * Create a new instance.
@@ -379,6 +379,96 @@ class SystemAlert {
                             } else {
                                 return $config->get('kotfire/system-alerts::over_time_message');
                             }
+                        } else {
+                            return $match[0];
+                        }
+                    },
+                    $alert['message']
+                );
+                return $alert;
+            },
+            $alerts
+        );
+    }
+
+    /**
+     * Replaces string with the alert date
+     *
+     * @param  array  $alerts
+     *
+     * @return array
+     */
+    private function replaceDate(Array $alerts)
+    {
+        $config = $this->config;
+        return array_map(
+            function($alert) use ($config) {
+                $alert['message'] = preg_replace_callback(
+                    '/{date}/',
+                    function($match) use ($alert, $config) {
+                        if (!is_null($alert['datetime'])) {
+                            $dateTime = Carbon::createFromFormat('Y-m-d H:i:s', $alert['datetime']);
+                            return $dateTime->toDateString();
+                        } else {
+                            return $match[0];
+                        }
+                    },
+                    $alert['message']
+                );
+                return $alert;
+            },
+            $alerts
+        );
+    }
+
+    /**
+     * Replaces string with the alert datetime
+     *
+     * @param  array  $alerts
+     *
+     * @return array
+     */
+    private function replaceDatetime(Array $alerts)
+    {
+        $config = $this->config;
+        return array_map(
+            function($alert) use ($config) {
+                $alert['message'] = preg_replace_callback(
+                    '/{datetime}/',
+                    function($match) use ($alert, $config) {
+                        if (!is_null($alert['datetime'])) {
+                            $dateTime = Carbon::createFromFormat('Y-m-d H:i:s', $alert['datetime']);
+                            return $dateTime->toDateTimeString();
+                        } else {
+                            return $match[0];
+                        }
+                    },
+                    $alert['message']
+                );
+                return $alert;
+            },
+            $alerts
+        );
+    }
+
+    /**
+     * Replaces string with the alert date with custom format
+     *
+     * @param  array  $alerts
+     *
+     * @return array
+     */
+    private function replaceDateformat(Array $alerts)
+    {
+        $config = $this->config;
+        return array_map(
+            function($alert) use ($config) {
+                $alert['message'] = preg_replace_callback(
+                    '/{format\|(.+)}/',
+                    function($match) use ($alert, $config) {
+                        if (!is_null($alert['datetime']) && isset($match[1])) {
+                            $dateTime = Carbon::createFromFormat('Y-m-d H:i:s', $alert['datetime']);
+                            return $dateTime->format($match[1]);
                         } else {
                             return $match[0];
                         }
