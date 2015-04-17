@@ -12,7 +12,7 @@ It includes a ServiceProvider and some commands to manage the alerts and automat
 This package is available on [packagist](http://packagist.org), just add it to your composer.json
 
 ```json
-"kotfire/system-alerts": "0.1.*"
+"kotfire/system-alerts": "0.2.*"
 ```
 
 After updating composer, add the ServiceProvider to the providers array in __app/config/app.php__
@@ -45,7 +45,7 @@ To publish views use
 $ php artisan view:publish kotfire/system-alerts
 ```
 
-By publishing the views you may edit the template used to display the alert messages and give them your own style
+By publishing the views you may edit the template used to display the alert messages and make them your own style
 
 ## Usage
 
@@ -79,10 +79,6 @@ This add new maintenance alert:
 - Message: "Maintenance in {time}"
 - Datetime: NOW + 15min
 
-There are some modifiers you can use and will be replaced when the message is displayed:
-
-* {time} => Show the remaining time to the maintenance datetime
-
 Example:
 
 ```
@@ -109,7 +105,19 @@ This kind of alerts are not deleted automatically.
 **_Add new alert_**
 
 ```
-$ php artisan alert "Message"
+$ php artisan alert "Message" [-d "datetime"]
+```
+
+Example:
+
+```
+$ php artisan alert "This is an alert"
+```
+
+or 
+
+```
+$ php artisan alert "This message will self-destruct in {time}" -d "12:50"
 ```
 
 #### Common
@@ -131,6 +139,17 @@ $ php artisan alert:list
 ```
 $ php artisan alert:clear
 ```
+
+#### Modifiers
+
+There are some modifiers you can use and will be replaced when the message is displayed:
+
+| Modifier                   | Description                                           | Example              | Result           |
+| ---------------------------| ----------------------------------------------------- | -------------------- | -------------------------- |
+| {time}                     | Show the remaining time to the maintenance datetime   | {time}               | 10 minutes          |
+| {date}                     | Show the date to the maintenance as 'Y-m-d'           | {date}               | 2015-04-01               |
+| {datetime}                 | Show the datetime to the maintenance as 'Y-m-d H:i:s' | {datetime}           | 2015-04-01 12:50:20      |
+| {format&#124;'dateformat'} | Show the datetime to the maintenance as 'date format' | {format&#124;d/m/Y H:i} | 01/04/2015 12:50 |
 
 ### Display
 
