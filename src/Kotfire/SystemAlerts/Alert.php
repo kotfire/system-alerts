@@ -52,9 +52,11 @@ class Alert implements JsonSerializable {
      *
      * @param  string  $msg
      * @param  string  $type
+     * @param  string  $datetime
+     *
      * @return void
      */
-    public function __construct($msg, $type, $minutes)
+    public function __construct($msg, $type, $datetime = null)
     {
         if (empty($msg) || empty($type)) {
             throw new Exception("Invalid Parameters");
@@ -68,13 +70,8 @@ class Alert implements JsonSerializable {
         $this->message = $msg;
         $this->type = $type;
 
-        if (!is_null($minutes)) {
-            $minutes = intval($minutes);
-        }
-
-        if (is_integer($minutes) && $minutes >= 0) {
-            $dt = Carbon::now();
-            $dt->addMinutes($minutes);
+        if (!is_null($datetime)) {
+            $dt = new Carbon($datetime);
             $this->datetime = $dt->toDateTimeString();
         } else {
             $this->datetime = null;

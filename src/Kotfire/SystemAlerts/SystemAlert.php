@@ -150,16 +150,17 @@ class SystemAlert {
      *
      * @param  string  $msg
      * @param  string  $type
+     * @param  string  $datetime
      *
      * @return boolean
      */
-    public function addAlert($msg, $type = Alert::INFO_TYPE, $minutes = null)
+    public function addAlert($msg, $type = Alert::INFO_TYPE, $datetime = null)
     {
         try {
             if ($type === Alert::MAINTENANCE_TYPE && $this->hasMaintenanceAlert()) {
                 throw new Exception("Maintenance alert already exists");
             }
-            $alert = new Alert($msg, $type, $minutes);
+            $alert = new Alert($msg, $type, $datetime);
             $loaded = $this->loadAlerts(false);
             $alerts = array_merge($loaded, $alert->toArray());
             $this->writeAlerts($alerts);

@@ -6,6 +6,7 @@ use Kotfire\SystemAlerts\SystemAlert as SystemAlert;
 use Kotfire\SystemAlerts\Alert as Alert;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Carbon\Carbon;
 
 class MaintenanceAlertCommand extends Command
 {
@@ -50,10 +51,22 @@ class MaintenanceAlertCommand extends Command
             $message = $alert['message'];
             $this->error("Maintenance alert already exists: $message");
         } else {
+            if ($this->option('time')) {
+                $minutes = intval($this->option('time'));
+            }
+
+            if (isset($minutes) && is_integer($minutes)) {
+                $dt = Carbon::now();
+                $dt->addMinutes($minutes);
+                $datetime = $dt->toDateTimeString();
+            } else {
+                $datetime = null;
+            }
+
             $this->systemAlert->addAlert(
                 $this->option('message'), 
                 Alert::MAINTENANCE_TYPE, 
-                $this->option('time')
+                $datetime
             );
             $this->info('Maintenance Alert added');
         }
