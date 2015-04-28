@@ -127,5 +127,4 @@ class Alert implements JsonSerializable {
             ]
         ];
     }
-
 }

@@ -144,12 +144,12 @@ $ php artisan alert:clear
 
 There are some modifiers you can use and will be replaced when the message is displayed:
 
-| Modifier                   | Description                                           | Example              | Result           |
-| ---------------------------| ----------------------------------------------------- | -------------------- | -------------------------- |
-| {time}                     | Show the remaining time to the maintenance datetime   | {time}               | 10 minutes          |
-| {date}                     | Show the date to the maintenance as 'Y-m-d'           | {date}               | 2015-04-01               |
-| {datetime}                 | Show the datetime to the maintenance as 'Y-m-d H:i:s' | {datetime}           | 2015-04-01 12:50:20      |
-| {format&#124;'dateformat'} | Show the datetime to the maintenance as 'date format' | {format&#124;d/m/Y H:i} | 01/04/2015 12:50 |
+| Modifier                   | Description                                           | Example                 | Result              |
+| ---------------------------| ----------------------------------------------------- | ----------------------- | --------------------|
+| {time}                     | Show the remaining time to the maintenance datetime   | {time}                  | 10 minutes          |
+| {date}                     | Show the date to the maintenance as 'Y-m-d'           | {date}                  | 2015-04-01          |
+| {datetime}                 | Show the datetime to the maintenance as 'Y-m-d H:i:s' | {datetime}              | 2015-04-01 12:50:20 |
+| {format&#124;'dateformat'} | Show the datetime to the maintenance as 'date format' | {format&#124;d/m/Y H:i} | 01/04/2015 12:50    |
 
 ### Display
 

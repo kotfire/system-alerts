@@ -6,6 +6,8 @@ use Illuminate\Filesystem\Filesystem;
 use \Exception;
 use \View;
 use Carbon\Carbon;
+use \Config;
+use \Log;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -138,6 +140,8 @@ class SystemAlert {
      */
     public function writeAlerts($alerts)
     {
+        $alerts = $this->sortAlerts($alerts);
+
         $path = $this->alertsStorage.'/alerts.json';
 
         $this->files->put($path, json_encode($alerts));
@@ -207,6 +211,7 @@ class SystemAlert {
             $this->writeAlerts([]);
             return true;
         } catch(Exception $e) {
+            $this->app['log']->debug($e->getMessage());
             return false;
         }
     }
@@ -297,6 +302,103 @@ class SystemAlert {
         }
 
         $this->writeAlerts($alerts);
+    }
+
+    /**
+     * Sort Alert
+     *
+     * @param Array $alerts
+     *
+     * @return Array
+     */
+    protected function sortAlerts(Array $alerts)
+    {
+        $app = $this->app;
+
+        uasort($alerts, ['self', 'compareAlerts']);
+
+        return $alerts;
+    }
+
+    private static function compareAlerts($a, $b)
+    {
+        $sortConfig = Config::get('kotfire/system-alerts::sorting.sort_by');
+        $orderConfig = Config::get('kotfire/system-alerts::sorting.order');
+
+        do {
+            if (is_array($sortConfig)) {
+                $sortBy = array_shift($sortConfig); 
+            } else {
+                $sortBy = $sortConfig;
+            }
+
+            if (is_array($orderConfig)) {
+                $order = array_shift($orderConfig); 
+            } else {
+                $order = $orderConfig;
+            }
+            $compare = self::compareAlertsBy($a, $b, $sortBy, $order);
+        } while ($compare == 0 && (!is_null($sortBy) && is_array($sortConfig)));
+
+        return $compare;
+    }
+
+    private static function compareAlertsBy($a, $b, $sortBy, $order)
+    {
+        if (is_null($sortBy) || is_null($order)) {
+            return 0;
+        }
+
+        if ($order === 'desc') {
+            $order = -1;
+        } else {
+            $order = 1;
+        }
+
+        switch ($sortBy) {
+            case 'type':
+                $priority = Config::get('kotfire/system-alerts::sorting.type_priority');
+                $typeA = array_search($a['type'], $priority) ?: count($priority);
+                $typeB = array_search($b['type'], $priority) ?: count($priority);
+
+                if ($typeA == $typeB) {
+                    return 0;
+                }
+                return ($typeA < $typeB) ? 1 * $order : -1 * $order;
+
+                break;
+            case 'datetime':
+                if (is_null($a['datetime']) && is_null($b['datetime'])) {
+                    return 0;
+                } else if (is_null($a['datetime'])) {
+                    return 1 * $order;
+                } else if (is_null($b['datetime'])) {
+                    return -1 * $order;
+                }
+
+                $dateA = Carbon::createFromFormat('Y-m-d H:i:s', $a['datetime']);
+                $dateB = Carbon::createFromFormat('Y-m-d H:i:s', $b['datetime']);
+
+                if ($dateA == $dateB) {
+                    return 0;
+                }
+                return ($dateA > $dateB) ? 1 * $order : -1 * $order;
+
+                break;
+            case 'created_at':
+                $createdA = Carbon::createFromFormat('Y-m-d H:i:s', $a['created_at']);
+                $createdB = Carbon::createFromFormat('Y-m-d H:i:s', $b['created_at']);
+
+                if ($createdA == $createdB) {
+                    return 0;
+                }
+                return ($createdA > $createdB) ? 1 * $order : -1 * $order;
+
+                break;
+            default:
+                return 0;
+                break;
+        }
     }
 
     /**

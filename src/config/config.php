@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,10 @@ return array(
     | There are some modifiers you can use and will be replaced when the message
     | is displayed:
     |
-    | * {time} => Show the remaining time to the maintenance
+    | {time}                => Show the remaining time to the maintenance datetime
+    | {date}                => Show the date to the maintenance as 'Y-m-d'
+    | {datetime}            => Show the datetime to the maintenance as 'Y-m-d H:i:s'
+    | {format|'dateformat'} => Show the datetime to the maintenance as 'date format'
     |
     */
 
@@ -80,4 +83,54 @@ return array(
     */
 
     'container_id' => 'alerts-container',
-);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Order
+    |--------------------------------------------------------------------------
+    |
+    | Configure alert order
+    |
+    */
+
+    'sorting' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sort By
+        |--------------------------------------------------------------------------
+        |
+        | Sort using this alert property
+        | 
+        | String    => 'type', 'datetime' or 'created_at'
+        | Array     => Combine properties ['type', 'datetime']
+        |
+        */
+        'sort_by' => ['type', 'datetime'],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Order
+        |--------------------------------------------------------------------------
+        |
+        | Sort direction
+        | 
+        | String    => 'asc' or 'desc'
+        | Array     => Combine orders ['asc', 'desc'] (When using sort_by as Array)
+        |
+        */
+        'order' => 'asc',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Type priority
+        |--------------------------------------------------------------------------
+        |
+        | Set up type priority (Only used if sorting by type)
+        | Types => 'maintenance' and 'info'
+        |
+        */
+        'type_priority' => ['maintenance', 'info'],
+
+    ],
+];
