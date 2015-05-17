@@ -8,6 +8,7 @@ use \View;
 use Carbon\Carbon;
 use \Config;
 use \Log;
+use \Event;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -171,6 +172,8 @@ class SystemAlert {
             $alerts = array_merge($loaded, $alert->toArray());
             $this->writeAlerts($alerts);
 
+            Event::fire('system-alerts::alert.added', [head($alert->toArray())]);
+
             return true;
         } catch(Exception $e) {
             return false;
@@ -193,8 +196,12 @@ class SystemAlert {
                 throw new Exception("Alert does not exists");
             }
 
+            $alert = $alerts[$id];
+
             unset($alerts[$id]);
             $this->writeAlerts($alerts);
+
+            Event::fire('system-alerts::alert.deleted', [$alert]);
 
             return true;
         } catch(Exception $e) {
@@ -211,6 +218,9 @@ class SystemAlert {
     {
         try {
             $this->writeAlerts([]);
+
+            Event::fire('system-alerts::alerts.cleared', [null]);
+
             return true;
         } catch(Exception $e) {
             $this->app['log']->debug($e->getMessage());
