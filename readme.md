@@ -12,7 +12,7 @@ It includes a ServiceProvider and some commands to manage the alerts and automat
 This package is available on [packagist](http://packagist.org), just add it to your composer.json
 
 ```json
-"kotfire/system-alerts": "0.3.*"
+"kotfire/system-alerts": "0.4.*"
 ```
 
 After updating composer, add the ServiceProvider to the providers array in __app/config/app.php__
