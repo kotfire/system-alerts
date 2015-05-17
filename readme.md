@@ -201,7 +201,7 @@ Different order:
 
 ### Events
 
-There are some events that can be fired:
+There are some events that will be fired:
 
 | Event name                   | Description                                           | Parameter               |
 | -----------------------------| ----------------------------------------------------- | ----------------------- |
