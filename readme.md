@@ -12,7 +12,7 @@ It includes a ServiceProvider and some commands to manage the alerts and automat
 This package is available on [packagist](http://packagist.org), just add it to your composer.json
 
 ```json
-"kotfire/system-alerts": "0.2.*"
+"kotfire/system-alerts": "0.3.*"
 ```
 
 After updating composer, add the ServiceProvider to the providers array in __app/config/app.php__
@@ -150,6 +150,54 @@ There are some modifiers you can use and will be replaced when the message is di
 | {date}                     | Show the date to the maintenance as 'Y-m-d'           | {date}                  | 2015-04-01          |
 | {datetime}                 | Show the datetime to the maintenance as 'Y-m-d H:i:s' | {datetime}              | 2015-04-01 12:50:20 |
 | {format&#124;'dateformat'} | Show the datetime to the maintenance as 'date format' | {format&#124;d/m/Y H:i} | 01/04/2015 12:50    |
+
+#### Sorting
+
+> Important: This feature was introduced in _version 0.3_, if you were using the package before this version re-publish the config file ([Configuration](#configuration))
+
+Alerts can be sorted using one or more attributes.
+
+By default the alerts will be sorted by type, then by the specified datetime and finally by the datetime they were created(all of them in ascending order).
+
+The attribute 'type' is a bit special and needs more configurations, if you are using type sorting, you must set the priority. This is an array where the first element is the most priority and the last the less.
+
+```
+'type_priority' => ['maintenance', 'info'],
+```
+
+**_Configure_**
+
+To configure the alerts sorting go to the config file.
+
+Sorting can be a String(sort by ONE attribute) or an Array of strings(sort by more than one attributes).
+
+Single attribute sorting:
+
+```
+'sort_by' => 'created_at',
+```
+
+Multiple attribute sorting:
+
+```
+'sort_by' => ['type', 'datetime', 'created_at'],
+```
+
+To define the order used in the attributes modify order
+
+Order can be a String(same order for all attributes) or an Array of strings(different order for each attribute).
+
+Same order:
+
+```
+'order' => 'asc',
+```
+
+Different order:
+
+```
+'order' => ['asc', 'desc', 'asc'],
+```
 
 ### Display
 
