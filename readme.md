@@ -199,6 +199,16 @@ Different order:
 'order' => ['asc', 'desc', 'asc'],
 ```
 
+### Events
+
+There are some events that can be fired:
+
+| Event name                   | Description                                           | Parameter               |
+| -----------------------------| ----------------------------------------------------- | ----------------------- |
+| system-alerts::alert.added   | Fired when alert was succesfully added                | Alert added (Array)     |
+| system-alerts::alert.deleted | Fired when alert was succesfully deleted              | Alert deleted (Array)   |
+| system-alerts::alert.cleared | Fired when all the alerts are deleted                 | Null                    |
+
 ### Display
 
 There are two ways to display the alerts: auto and manual
