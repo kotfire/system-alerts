@@ -123,6 +123,8 @@ class SystemAlert {
             $alerts = [];
         }
 
+        $alerts = $this->sortAlerts($alerts);
+
         // Parse alerts
         if ($parse) {
             return $this->parseAlerts($alerts);

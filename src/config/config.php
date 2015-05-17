@@ -106,7 +106,7 @@ return [
         | Array     => Combine properties ['type', 'datetime']
         |
         */
-        'sort_by' => ['type', 'datetime'],
+        'sort_by' => ['type', 'datetime', 'created_at'],
 
         /*
         |--------------------------------------------------------------------------
